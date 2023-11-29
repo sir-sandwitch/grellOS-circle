@@ -115,7 +115,7 @@ TShutdownMode CKernel::Run (void)
 
     void* pParam = 0;
     // Set irq 0 to system call handler
-    m_Interrupt.ConnectIRQ(0, SystemCallHandler, pParam);
+    m_Interrupt.ConnectIRQ(16, SystemCallHandler, pParam);
 
 	for (unsigned nCount = 0; m_ShutdownMode == ShutdownNone; nCount++)
 	{
@@ -392,6 +392,13 @@ CString CKernel::CStrRem(CString *pStr, int num){
     return temp;
 }
 
+
+/*
+    handles system calls from programs
+    args are in x0-7
+    syscall # is in x8
+    called with svc #16
+*/
 void CKernel::SystemCallHandler(void *pParam){
     //crashes here with synchronous exception
     assert (s_pThis != 0);
